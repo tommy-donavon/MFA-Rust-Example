@@ -15,9 +15,9 @@ use std::error::Error;
 use dotenv::dotenv;
 use diesel::{sqlite::SqliteConnection, r2d2::{self, ConnectionManager}};
 use crate::db::ConnectionOptions;
-use crate::models::{NewUserCode, UserCode};
+use crate::models::code::{NewUserCode, UserCode};
+use crate::models::user::User;
 use crate::utils::{hash, send_email};
-
 pub type Pool = r2d2::Pool<ConnectionManager<SqliteConnection>>;
 
 fn main() -> Result<(), Box<dyn Error>>{
@@ -39,7 +39,7 @@ fn main() -> Result<(), Box<dyn Error>>{
     println!("Please Enter Your Password: ");
     let mut provided_password = String::new();
     io::stdin().read_line(&mut provided_password)?;
-    let u = models::User{
+    let u = User{
         email: provided_email.trim().to_owned(),
         password: hash(provided_password.trim())
     };
