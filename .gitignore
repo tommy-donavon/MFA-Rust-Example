@@ -1,0 +1,8 @@
+target/
+debug/
+*.db
+*.db-*
+.env
+.idea/
+.vscode/
+
