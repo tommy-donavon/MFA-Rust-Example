@@ -36,7 +36,6 @@ impl Display for Menu {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         write!(f, "Please Select from the following options: \n").expect("could not write to standard output");
         for (mut count, item) in self.options.iter().enumerate() {
-            // let p_count = count + 1;
             count += 1;
             write!(f, "{count}) {item}\n").expect("could not write to standard output");
         };
