@@ -1,12 +1,14 @@
-use std::time::Duration;
-use diesel::{SqliteConnection, r2d2::{CustomizeConnection, Error as PoolError}};
+use std::{env, error::Error,time::Duration};
+use diesel::{SqliteConnection, r2d2::{ConnectionManager,CustomizeConnection, Error as PoolError}, r2d2};
 use diesel::connection::SimpleConnection;
 
+pub type Pool = r2d2::Pool<ConnectionManager<SqliteConnection>>;
+
 #[derive(Debug)]
-pub struct ConnectionOptions {
-    pub enable_wal: bool,
-    pub enable_foreign_keys: bool,
-    pub busy_timeout: Option<Duration>,
+struct ConnectionOptions {
+    enable_wal: bool,
+    enable_foreign_keys: bool,
+    busy_timeout: Option<Duration>,
 }
 
 impl CustomizeConnection<SqliteConnection, PoolError> for ConnectionOptions {
@@ -24,4 +26,18 @@ impl CustomizeConnection<SqliteConnection, PoolError> for ConnectionOptions {
             Ok(())
         })().map_err(PoolError::QueryError)
     }
+}
+
+pub fn establish_connection(enable_wal:bool, enable_foreign_keys:bool, busy_timeout:Option<Duration>) -> Result<Pool,Box<dyn Error>> {
+    let conn_ops = Box::new(ConnectionOptions {
+        enable_wal,
+        enable_foreign_keys,
+        busy_timeout
+    });
+    let database_url:String = env::var("DATABASE_URL")?;
+    let database_pool = Pool::builder()
+        .max_size(16)
+        .connection_customizer(conn_ops)
+        .build(ConnectionManager::<SqliteConnection>::new(database_url))?;
+    Ok(database_pool)
 }

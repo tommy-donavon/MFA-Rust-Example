@@ -1,9 +1,9 @@
 use std::error::Error;
 use diesel::{select, dsl::exists, QueryDsl, RunQueryDsl};
 use diesel::prelude::*;
-use crate::schema::user::dsl::*;
-use crate::schema::user;
-use crate::Pool;
+use crate::models::schema::user::dsl::*;
+use crate::models::schema::user;
+use crate::db::Pool;
 
 #[derive(Queryable, Insertable, Debug)]
 #[table_name = "user"]

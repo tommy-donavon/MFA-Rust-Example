@@ -13,8 +13,7 @@ pub fn hash(input: &str) -> String {
 }
 
 pub fn gen_rand_num() -> String {
-    let num = thread_rng().gen_range(0..=10000);
-    num.to_string()
+    thread_rng().gen_range(10000..=99999).to_string()
 }
 
 pub fn send_email(to_user: &str, code: &str) -> Result<(), Box<dyn Error>> {

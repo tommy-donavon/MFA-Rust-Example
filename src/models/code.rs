@@ -1,9 +1,9 @@
 use std::error::Error;
 use diesel::{QueryDsl, RunQueryDsl};
 use diesel::prelude::*;
-use crate::schema::user_code::dsl::*;
-use crate::schema::user_code;
-use crate::Pool;
+use crate::models::schema::user_code::dsl::*;
+use crate::models::schema::user_code;
+use crate::db::Pool;
 
 #[derive(Insertable, Debug)]
 #[table_name = "user_code"]
