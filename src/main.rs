@@ -13,7 +13,6 @@ use std::{io, time::Duration};
 use std::error::Error;
 use std::fmt::{Display, Formatter};
 use dotenv::dotenv;
-// use lettre::message::MaybeString::String;
 use crate::db::establish_connection;
 use crate::models::code::{NewUserCode, UserCode};
 use crate::models::user::User;
