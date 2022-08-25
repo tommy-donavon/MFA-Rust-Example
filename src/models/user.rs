@@ -29,4 +29,10 @@ impl User {
         ).get_result::<bool>(&connection)?;
         Ok(result)
     }
+    pub fn new(p_email: &str, p_password:&str) -> User {
+        User{
+            email:p_email.to_owned(),
+            password:p_password.to_owned(),
+        }
+    }
 }
