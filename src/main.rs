@@ -24,7 +24,7 @@ struct Menu {
 }
 
 impl Menu {
-    fn new(mut options:Vec<String>) -> Menu{
+    fn new(mut options: Vec<String>) -> Menu {
         options.push("Exit".to_owned());
         Menu {
             options
@@ -44,8 +44,7 @@ impl Display for Menu {
 }
 
 
-
-fn main() -> Result<(), Box<dyn Error>>{
+fn main() -> Result<(), Box<dyn Error>> {
     dotenv().ok();
     let menu_options = vec!["Create Account".to_owned(), "Login".to_owned()];
     let menu = Menu::new(menu_options);
@@ -77,14 +76,14 @@ fn main() -> Result<(), Box<dyn Error>>{
                 let mut provided_password = String::new();
                 io::stdin().read_line(&mut provided_password)?;
                 let u = User::new(provided_email.trim(), hash(provided_password.trim()).as_str());
-                let first_factor:bool = u.verify(database_pool.clone())?;
+                let first_factor: bool = u.verify(database_pool.clone())?;
                 if !first_factor {
                     println!("Invalid Credentials");
                     return Ok(());
                 }
-                let code = NewUserCode{
+                let code = NewUserCode {
                     code: utils::gen_rand_num(),
-                    user_email: u.email.clone()
+                    user_email: u.email.clone(),
                 };
                 code.save(database_pool.clone())?;
                 send_email(u.email.clone().as_str(), code.code.as_str())?;
@@ -92,9 +91,9 @@ fn main() -> Result<(), Box<dyn Error>>{
                 let mut provided_code = String::new();
                 io::stdin().read_line(&mut provided_code)?;
                 let f_code = UserCode::get_code(u.email.clone().as_str(), database_pool.clone())?;
-                if f_code.code.eq(&provided_code.trim()){
+                if f_code.code.eq(&provided_code.trim()) {
                     println!("You are in!")
-                }else {
+                } else {
                     println!("Invalid code")
                 }
                 UserCode::delete_code(u.email.as_str(), database_pool)?;
